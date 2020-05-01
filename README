@@ -1,0 +1,34 @@
+Sane-pixma button control is a small script that allows scanners supported by
+the sane-pixma backend to be controlled by the physical buttons present on the
+scanners. This allows the scanner to be operated on a headless machine or a
+server without the need for another machine or network communications.
+
+Sane-pixma button control allows for single- or multi-page PDF scans, PNG scans
+and photocopying (i.e. printing a scan).
+
+Requirements:
+	sane-backends with libusb and libpng support.
+	imagemagick.
+	A sane-pixma backend compatible scanner.
+
+Setup:
+	The OUTPUT_DIR variable in the script must be set to a valid location.
+
+Usage:
+	Running the script looks for the first available scanner device detected by
+	scanimage. It will poll this scanner repeatedly to check whether a button
+	has been pressed. The polling timeout can be set using the POLLING_TIMEOUT
+	variable found in the script.
+	Based upon the button that was pressed, the scanner will start scanning and
+	output its contents into the directory defined by the OUTPUT_DIR variable.
+
+This script has been tested using a Canon CanoScan LiDE 300, using a source
+build of sane-backends 1.0.29 running on Debian 10 Buster.
+
+CanoScan LiDE 300 button mapping and programmed actions:
+	PDF:		4		Scan multi-page / batch PDF
+	Auto Scan:	2		Scan one PNG
+	Copy:		1		Scan one PNG and print via printer
+	Send:		3		Scan final batch PDF page or scan a one page PDF
+
+Released under the MIT License
