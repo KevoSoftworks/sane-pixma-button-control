@@ -106,7 +106,8 @@ while [[ -n "${device}" ]]; do
 			# If we hit the send button, we want to convert to PDF and move it
 			if [[ $action -eq 3 ]]; then
 				echo "Converting scans to PDF and moving."
-				convert "$tmp_dir/*.png" "$tmp_dir/out.pdf"
+				convert "$tmp_dir/*.png" -compress jpeg \
+					-quality 75 "$tmp_dir/out.pdf"
 				mv "$tmp_dir/out.pdf" \
 					"$OUTPUT_DIR/scan-$(date +'%F-%H-%M-%S').pdf"
 			# Otherwise, we just want to move the scan
