@@ -14,6 +14,17 @@ Requirements:
 Setup:
 	The OUTPUT_DIR variable in the script must be set to a valid location.
 
+	The POLLING_TIMEOUT variable dictates the amount of seconds the script
+	sleeps before checking with the pixma-backend whether a button was pressed
+	on the scanner.
+
+	The KEEP_ORIGINAL variable can be set to `true` to also save the raw
+	PNG scans.
+
+	When using Ghostscript >= 9.24 as the backend for ImageMagick's `convert`,
+	ensure that you allow conversion of PDFs by modifying the PDF policy in
+	`/etc/ImageMagick-*/policy.xml`.
+
 Usage:
 	Running the script looks for the first available scanner device detected by
 	scanimage. It will poll this scanner repeatedly to check whether a button

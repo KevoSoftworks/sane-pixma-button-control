@@ -1,11 +1,14 @@
 #!/bin/bash
 
-# The amount of time to wait before checking a button press.
+# The amount of time (in seconds) to wait before checking a button press.
 POLLING_TIMEOUT=3
 
 # Ensure that these directories exist, and that the user running the script
 # has write access to these directories.
 OUTPUT_DIR=/srv/samba/_scans_
+
+# Whether to keep the original scanned PNGs when converting to PDF.
+KEEP_ORIGINAL=true
 
 # Get the device name of the scanner
 #
@@ -103,18 +106,26 @@ while [[ -n "${device}" ]]; do
 
 		# Save files if we are not creating a batch PDF
 		if [[ $action -ne 4 ]]; then
+			filename="scan-$(date +'%F-%H-%M-%S')"
 			# If we hit the send button, we want to convert to PDF and move it
 			if [[ $action -eq 3 ]]; then
 				echo "Converting scans to PDF and moving."
 				convert "$tmp_dir/*.png" -compress jpeg \
 					-quality 75 "$tmp_dir/out.pdf"
 				mv "$tmp_dir/out.pdf" \
-					"$OUTPUT_DIR/scan-$(date +'%F-%H-%M-%S').pdf"
+					"$OUTPUT_DIR/$filename.pdf"
+
+				# If we want to keep the original PNGs, we'll need to move them too
+				if $KEEP_ORIGINAL; then
+					echo "Moving original PNGs."
+					mkdir -p "$OUTPUT_DIR/_raw_/$filename"
+					cp "$tmp_dir/"* "$OUTPUT_DIR/_raw_/$filename"
+				fi
 			# Otherwise, we just want to move the scan
 			else
 				echo "Moving scan."
 				mv $output_path \
-					"$OUTPUT_DIR/scan-$(date +'%F-%H-%M-%S').png"
+					"$OUTPUT_DIR/$filename.png"
 			fi
 
 			# Delete the temporary directory
